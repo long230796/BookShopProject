@@ -20,7 +20,7 @@ public class Sachngoaingu {
 	private Integer masach;
 	
 	@NotEmpty   // không được bỏ trống
-	@Size(max=50)  // nhập không quá 50 kí tự
+	@Size(max=70)  // nhập không quá 50 kí tự
 	@Column(name = "Tensach", nullable = false)
 	private String tensach;
 	

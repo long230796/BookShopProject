@@ -24,9 +24,21 @@
                 </div>
             </div>
 
-            <div class="buy-element2 ">
-                <div class="name">
-                    <h2 th:text="${book.tensach}" style="font-weight: normal;"></h2>
+            <div class="buy-element2">
+                <div class="name d-flex align-items-center">
+                	<div class="pr-3">
+                		<h2 th:text="${book.tensach}" style="font-weight: normal;"></h2>
+                	</div>
+                    
+                   	<div class=" align-items-center">
+                  		<a href="#" th:href="@{/book/{masach}/edit(masach=${book.masach})}" class="text-primary mr-sm-2"> <!-- (masach=${book.masach}) truyền giá trị cho {id} -->
+							<i class="fas fa-pencil-alt"></i>
+						</a>
+
+						<a href="#" th:href="@{/book/{masach}/{theloai}/delete(masach=${book.masach}, theloai=${book.theloai})}" class="text-danger">
+							<i class="fas fa-trash"></i>
+						</a>
+					</div>
                 </div>
                 <div class="author">
                     <h6>Tác giả: <b th:text="${book.tacgia}" ></b></h6>
@@ -100,118 +112,78 @@
                 <table class="table table-borderless">
                     <tbody>
                         <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
+                            <th scope="row">Mã sách</th>
+                            <td th:text="${book.masach}"></td>
                         </tr>
                         <tr>
-                            <th scope="row">2</th>
-                            <td>Jacob</td>
+                            <th scope="row">Tên sách</th>
+                            <td th:text="${book.tensach}"></td>
                         </tr>
                         <tr>
-                            <th scope="row">3</th>
-                            <td>Larry</td>
+                            <th scope="row">tác giả</th>
+                            <td th:text="${book.tacgia}"></td>
                         </tr>
                         <tr>
-                            <th scope="row">3</th>
-                            <td>Larry</td>
+                            <th scope="row">Thể loại</th>
+                            <td th:text="${book.theloai}"></td>
                         </tr>
                         <tr>
-                            <th scope="row">3</th>
-                            <td>Larry</td>
+                            <th scope="row">Tồn kho</th>
+                            <td th:text="${book.tonkho}"></td>
                         </tr>
                         <tr>
-                            <th scope="row">3</th>
-                            <td>Larry</td>
+                            <th scope="row">Số lượng đã bán</th>
+                            <td th:text="${book.soluongdaban}"></td>
                         </tr>
                         <tr>
-                            <th scope="row">3</th>
-                            <td>Larry</td>
-                        </tr>
+                            <th scope="row">Ngày xuất bản</th>
+                            <td th:text="${book.ngayxuatban}"></td>
+                        </tr> 
                     </tbody>
                 </table>
+                
+                <div>
+                	<pre class="p-3" style="border-top: 1px solid #e1dcdc; text-align: start; white-space: pre-wrap; white-space: -moz-pre-wrap; white-space: -pre-wrap;white-space: -o-pre-wrap; word-wrap: break-word; " th:text="${book.mota}"></pre>
+                </div>
             </div>
         </div>
 
         <!-- xem nhieu -->
-        <div class="views mt-3" style="background-color: #ffffff">
-            <div>
-                <h2 class="section-heading p-2" style="border-bottom: 1px solid #e1dcdc; color: #33b5e5">
-                    <b>Xem nhiều</b>
-                    <i class="fas fa-book"></i>
-                </h2>
-            </div>
+        <div class="views mw-100" style="background-color: #ffffff">
+			<div  th:if="${!views.isEmpty()}" >
+				<h2 class="section-heading"  style="border-bottom: 1px solid #e1dcdc;  text-align: start">
+					<b>Xem nhiều</b>
+					<i class="fas fa-book"></i>
+				</h2>
+			</div>
+			
+			<div  class="card-container d-flex justify-content-around flex-wrap">
+				<div th:each="book, iterStat : ${views}" th:unless="${iterStat.count > 10}" class="card m-2" style="width: 200px">
+					<!-- Card image -->
+					<div class="view overlay zoom">
+						<a href="#" th:href="@{/book/{masach}/detail(masach=${book.masach})}" class="text-primary mr-sm-2">
+							<img class="card-img-top" style="max-width: 100%;" th:src="@{/image/{image}(image=${book.hinhanh})}" th:alt="@{{image}(image=${book.hinhanh})}">
+						</a>
+					</div>	
+					<!-- Card content -->
+					<div class="card-body">
 
-            <div class="views-row d-flex justify-content-around">
+						<!-- Text -->
+						<p th:text="${book.tensach}" class="card-text"></p>
+					  	<div>
+		                  <h6 th:text="${book.giaca}" class="text-warning" style="font-weight: 600" ></h6>
+		                </div>
 
-                <div class="card m-2" style="width: 200px">
-
-                    <!-- Card image -->
-                    <img class="card-img-top" style="max-width: 100%;" src="https://mdbootstrap.com/img/Photos/Others/images/43.jpg" alt="Card image cap">
-
-                    <!-- Card content -->
-                    <div class="card-body">
-
-                        <!-- Title -->
-                        <h4 class="card-title"><a>Card title</a></h4>
-                        <!-- Text -->
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
-                            content.</p>
-                        <!-- Button -->
-                        <a href="#" class="btn btn-primary">Button</a>
-
-                    </div>
-
-                </div>
-
-
-                <div class="card m-2" style="width: 200px">
-
-                    <!-- Card image -->
-                    <img class="card-img-top" style="max-width: 100%;" src="https://mdbootstrap.com/img/Photos/Others/images/43.jpg" alt="Card image cap">
-
-                    <!-- Card content -->
-                    <div class="card-body">
-
-                        <!-- Title -->
-                        <h4 class="card-title"><a>Card title</a></h4>
-                        <!-- Text -->
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
-                            content.</p>
-                        <!-- Button -->
-                        <a href="#" class="btn btn-primary">Button</a>
-
-                    </div>
-
-                </div>
-
-
-                <div class="card m-2" style="width: 200px">
-
-                    <!-- Card image -->
-                    <img class="card-img-top" style="max-width: 100%;" src="https://mdbootstrap.com/img/Photos/Others/images/43.jpg" alt="Card image cap">
-
-                    <!-- Card content -->
-                    <div class="card-body">
-
-                        <!-- Title -->
-                        <h4 class="card-title"><a>Card title</a></h4>
-                        <!-- Text -->
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
-                            content.</p>
-                        <!-- Button -->
-                        <a href="#" class="btn btn-primary">Button</a>
-
-                    </div>
-
-                </div>
-            </div>
-
-        </div>
+					</div>
+				</div>			
+				
+			</div>
+		</div>
 
         <!-- the loai khac-->
         <div class="another-category" style="background-color: #ffffff">
             <div>
-                <h3><b>Thể loại khác</b></h3>
+                <h3><b>Nổi bật</b></h3>
             </div>
         </div>
 
@@ -219,7 +191,7 @@
     </div>
 
     <script type="text/javascript" src="/MDB-free/js/amountBtn.js"></script>
-
+	
 </body>
 
 </html>

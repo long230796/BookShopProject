@@ -20,6 +20,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
+import java.util.Random;
 
 import group10.bookShop.entities.Kinhte;
 import group10.bookShop.entities.Kynangsong;
@@ -91,14 +92,93 @@ public class SachController {
 		return "index";
 	}
 	
+	@GetMapping("/book/foreignLanguage")
+	public String foreignLanguage(Model model) {
+		try {
+			model.addAttribute("foreignLanguages", sachngoainguService.findAll());
+		}catch(NullPointerException e) {
+			model.addAttribute("errorMessage", e);
+		}
+		
+		return "/theloai/foreignLanguage";
+	}
+	
+	
+	@GetMapping("/book/domestic")
+	public String domestic (Model model) {
+		try {
+			model.addAttribute("domestics", vanhoctrongnuocService.findAll());
+		}catch(NullPointerException e) {
+			model.addAttribute("errorMessage", e);
+		}
+		
+		return "/theloai/domestic";
+	}
+	
+	
+	@GetMapping("/book/foreign")
+	public String foreign(Model model) {
+		try {
+			model.addAttribute("foreigns", vanhocnuocngoaiService.findAll());
+		}catch(NullPointerException e) {
+			model.addAttribute("errorMessage", e);
+		}
+		
+		return "/theloai/foreign";
+	}
+	
+	@GetMapping("/book/kid")
+	public String kid(Model model) {
+		try {
+			model.addAttribute("kids", thieunhiService.findAll());
+		}catch(NullPointerException e) {
+			model.addAttribute("errorMessage", e);
+		}
+		
+		return "/theloai/kid";
+	}
+	
+	@GetMapping("/book/lifeSkill")
+	public String lifeSkill(Model model) {
+		try {
+			model.addAttribute("lifeSkills", kynangsongService.findAll());
+		}catch(NullPointerException e) {
+			model.addAttribute("errorMessage", e);
+		}
+		
+		return "/theloai/lifeSkill";
+	}
+	
+	@GetMapping("/book/rear")
+	public String rear(Model model) {
+		try {
+			model.addAttribute("rears", nuoidayconService.findAll());
+		}catch(NullPointerException e) {
+			model.addAttribute("errorMessage", e);
+		}
+		
+		return "/theloai/rear";
+	}
+	
+	@GetMapping("/book/economic")
+	public String economic(Model model) {
+		try {
+			model.addAttribute("economics", kinhteService.findAll());
+		}catch(NullPointerException e) {
+			model.addAttribute("errorMessage", e);
+		}
+		
+		return "/theloai/economic";
+	}
+	
 	@GetMapping("/book/search")
 	public String search (@RequestParam("name") String name, Model model) {
 		if(org.springframework.util.StringUtils.isEmpty(name)) {
 			return "redirect:/book";
 		}
 //		System.out.println(contactService.search(name));
-		model.addAttribute("books", bookService.search(name));
-		return "list";
+		model.addAttribute("results", bookService.search(name));
+		return "search";
 	}
 	
 	@GetMapping("/book/add")
@@ -116,46 +196,67 @@ public class SachController {
 		    book.setLuocxem(currentViews += 1);
 		    bookService.save(book);
 		    
+		    // random the loai khac 
+//		    String[] theloai = {"kinhteService","nuoidayconService","kynangsongService","sachgiaokhoaService","sachngoainguService","thieunhiService","vanhocnuocngoaiService","vanhoctrongnuocService"};
+//
+//		    int idx = new Random().nextInt(theloai.length);
+//			String random = (theloai[idx]);
+			    
 		    switch(currentCategory) {
 		    case "kinhte" :
 			 	model.addAttribute("book", bookService.findById(masach));
 			 	model.addAttribute("relateBooks", kinhteService.findAll());
-
+			 	model.addAttribute("views", bookService.findLuocxemDesc());
+			 	
 			    break;
 			    
 		    case "nuoidaycon" :
 			 	model.addAttribute("book", bookService.findById(masach));
 			 	model.addAttribute("relateBooks", nuoidayconService.findAll());
+			 	model.addAttribute("views", bookService.findLuocxemDesc());
+
 			    break;
 			    
 		    case "kynangsong" :
 			 	model.addAttribute("book", bookService.findById(masach));
 			 	model.addAttribute("relateBooks", kynangsongService.findAll());
+			 	model.addAttribute("views", bookService.findLuocxemDesc());
+
 			    break;
 			    
 		    case "sachgiaokhoa" :
 			 	model.addAttribute("book", bookService.findById(masach));
 			 	model.addAttribute("relateBooks", sachgiaokhoaService.findAll());
+			 	model.addAttribute("views", bookService.findLuocxemDesc());
+
 			    break;
 			    
 		    case "sachngoaingu" :
 			 	model.addAttribute("book", bookService.findById(masach));
 			 	model.addAttribute("relateBooks", sachngoainguService.findAll());
+			 	model.addAttribute("views", bookService.findLuocxemDesc());
+
 			    break;
 			    
 		    case "thieunhi" :
 			 	model.addAttribute("book", bookService.findById(masach));
 			 	model.addAttribute("relateBooks", thieunhiService.findAll());
+			 	model.addAttribute("views", bookService.findLuocxemDesc());
+
 			    break;
 			    
 		    case "vanhocnuocngoai" :
 			 	model.addAttribute("book", bookService.findById(masach));
 			 	model.addAttribute("relateBooks", vanhocnuocngoaiService.findAll());
+			 	model.addAttribute("views", bookService.findLuocxemDesc());
+
 			    break;
 			
 		    case "vanhoctrongnuoc" :
 			 	model.addAttribute("book", bookService.findById(masach));
 			 	model.addAttribute("relateBooks", vanhoctrongnuocService.findAll());
+			 	model.addAttribute("views", bookService.findLuocxemDesc());
+
 			    break;
 		    }
 
@@ -307,7 +408,7 @@ public class SachController {
 	    int currentViews = book.getLuocxem();
 	    book.setLuocxem(currentViews += 1);
 	    bookService.save(book);
-	    return "form";
+	    return "addBook";
 	}
 	
 	@GetMapping("/book/{masach}/{theloai}/delete")
