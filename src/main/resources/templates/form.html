@@ -7,7 +7,7 @@
 
     <div class="container" id="main-content">
         <div class="row d-flex justify-content-center">
-            <form style="min-width: 300px;" action="#" th:action="@{/book/save}" th:object="${book}" method="post" novalidate="novalidate">
+            <form style="min-width: 300px;" action="#" th:action="@{/book/save}" th:object="${book}" method="post" novalidate="novalidate" enctype="multipart/form-data">
 			    <h5 class="text-center">book form</h5>
 			
 			    <input type="hidden" th:field="*{masach}" />  <!-- những field trong này phải giống với file entities -->
@@ -54,9 +54,10 @@
 			    </div>
 			    
 			    <div class="form-group">
-			        <input class="form-control" type="text" placeholder="image"
-			               th:field="*{hinhanh}" th:errorclass="field-error" />
-			        <em th:if="${#fields.hasErrors('hinhanh')}" th:errors="*{hinhanh}"></em>
+			        <input class="form-control" type="file" name="file" placeholder="image"/>
+			        <p th:text="${fileError}" th:if="${fileError ne null}" class="alert alert-primary"></p>
+			        
+			       <!--  <em th:if="${#fields.hasErrors('hinhanh')}" th:errors="*{hinhanh}"></em> -->
 			    </div>
 			    
 			    <div class="form-group">

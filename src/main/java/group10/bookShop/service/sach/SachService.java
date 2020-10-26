@@ -2,6 +2,8 @@ package group10.bookShop.service.sach;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import group10.bookShop.entities.Sach;
 
 public interface SachService 
@@ -9,6 +11,10 @@ public interface SachService
 	Iterable<Sach> findAll();
 	
 	List<Sach> search(String tensach);
+	
+	List<Sach> findMasachDesc();
+	List<Sach> findLuocxemDesc();
+
 	
 	Sach findById(Integer masach);
 	

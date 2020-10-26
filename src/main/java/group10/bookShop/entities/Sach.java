@@ -20,12 +20,12 @@ public class Sach {
 	private Integer masach;
 	
 	@NotEmpty   // không được bỏ trống
-	@Size(max=50)  // nhập không quá 50 kí tự
+	@Size(max=70)  // nhập không quá 50 kí tự
 	@Column(name = "Tensach", nullable = false)
 	private String tensach;
 	
 	@NotEmpty   // không được bỏ trống
-	@Size(max=20)  // nhập không quá 50 kí tự
+	@Size(max=70)  // nhập không quá 50 kí tự
 	@Column(name = "Tacgia", nullable = false)
 	private String tacgia;
 	
@@ -40,6 +40,9 @@ public class Sach {
 	
 	@Column(name = "Mota", nullable = false)
 	private String mota;
+	
+	@Column(name = "Luocxem")
+	private int luocxem;
 	
 	@NotEmpty   // không được bỏ trống
 	@Column(name = "Hinhanh", nullable = false)
@@ -63,11 +66,9 @@ public class Sach {
 		this.masach = uniqueId;
 	}
 
-	
-
 	public Sach(Integer masach, @NotEmpty @Size(max = 50) String tensach, @NotEmpty @Size(max = 20) String tacgia,
-			@NotEmpty @Size(max = 20) String theloai, @NotNull Double giaca, String mota, @NotEmpty String hinhanh,
-			@NotNull int tonkho, @NotNull int soluongdaban, LocalDateTime ngayxuatban) {
+			@NotEmpty @Size(max = 20) String theloai, @NotNull Double giaca, String mota, int luocxem,
+			@NotEmpty String hinhanh, @NotNull int tonkho, @NotNull int soluongdaban, LocalDateTime ngayxuatban) {
 		super();
 		this.masach = masach;
 		this.tensach = tensach;
@@ -75,133 +76,104 @@ public class Sach {
 		this.theloai = theloai;
 		this.giaca = giaca;
 		this.mota = mota;
+		this.luocxem = luocxem;
 		this.hinhanh = hinhanh;
 		this.tonkho = tonkho;
 		this.soluongdaban = soluongdaban;
 		this.ngayxuatban = ngayxuatban;
 	}
 
-
-
 	public Integer getMasach() {
 		return masach;
 	}
-
-
 
 	public void setMasach(Integer masach) {
 		this.masach = masach;
 	}
 
-
-
 	public String getTensach() {
 		return tensach;
 	}
-
-
 
 	public void setTensach(String tensach) {
 		this.tensach = tensach;
 	}
 
-
-
 	public String getTacgia() {
 		return tacgia;
 	}
-
-
 
 	public void setTacgia(String tacgia) {
 		this.tacgia = tacgia;
 	}
 
-
-
 	public String getTheloai() {
 		return theloai;
 	}
-
-
 
 	public void setTheloai(String theloai) {
 		this.theloai = theloai;
 	}
 
-
-
 	public Double getGiaca() {
 		return giaca;
 	}
-
-
 
 	public void setGiaca(Double giaca) {
 		this.giaca = giaca;
 	}
 
-
-
 	public String getMota() {
 		return mota;
 	}
-
-
 
 	public void setMota(String mota) {
 		this.mota = mota;
 	}
 
+	public int getLuocxem() {
+		return luocxem;
+	}
 
+	public void setLuocxem(int luocxem) {
+		this.luocxem = luocxem;
+	}
 
 	public String getHinhanh() {
 		return hinhanh;
 	}
 
-
-
 	public void setHinhanh(String hinhanh) {
 		this.hinhanh = hinhanh;
 	}
-
-
 
 	public int getTonkho() {
 		return tonkho;
 	}
 
-
-
 	public void setTonkho(int tonkho) {
 		this.tonkho = tonkho;
 	}
-
-
 
 	public int getSoluongdaban() {
 		return soluongdaban;
 	}
 
-
-
 	public void setSoluongdaban(int soluongdaban) {
 		this.soluongdaban = soluongdaban;
 	}
-
-
 
 	public LocalDateTime getNgayxuatban() {
 		return ngayxuatban;
 	}
 
-
-
-	public void setNgayxuatban(LocalDateTime localDateTime) {
-		this.ngayxuatban = localDateTime;
+	public void setNgayxuatban(LocalDateTime ngayxuatban) {
+		this.ngayxuatban = ngayxuatban;
 	}
 
+	
 
+	
 
 	
 	

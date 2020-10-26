@@ -25,7 +25,7 @@ public class Kinhte {
 	private String tensach;
 	
 	@NotEmpty   // không được bỏ trống
-	@Size(max=20)  // nhập không quá 50 kí tự
+	@Size(max=50)  // nhập không quá 50 kí tự
 	@Column(name = "Tacgia", nullable = false)
 	private String tacgia;
 	

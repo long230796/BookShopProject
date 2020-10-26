@@ -66,7 +66,7 @@
 						<td th:text="${book.theloai}"></td>
 						<td th:text="${book.giaca}"></td>
 						<td th:text="${book.mota}"></td>
-						<td th:text="${book.hinhanh}"></td>
+						<td><img alt="" th:src="@{/image/{image}(image=${book.hinhanh})}"></td>
 						<td th:text="${book.tonkho}"></td>
 						<td th:text="${book.soluongdaban}"></td>
 						<td th:text="${book.ngayxuatban}"></td>

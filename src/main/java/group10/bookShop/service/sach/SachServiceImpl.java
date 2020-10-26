@@ -15,6 +15,7 @@ public class SachServiceImpl implements SachService {
 	@Autowired
 	private SachRepository sachRepository;  // lop service goi lop dao 
 	
+	
 	@Override
 	public Iterable<Sach> findAll() {
 		return sachRepository.findAll();
@@ -39,5 +40,15 @@ public class SachServiceImpl implements SachService {
 	@Override
     public List<Sach> search(String tensach) {
         return sachRepository.findByTensachContaining(tensach);
+    }
+	
+	@Override
+    public List<Sach> findMasachDesc() {
+        return sachRepository.findByOrderByMasachDesc();
+    }
+	
+	@Override
+    public List<Sach> findLuocxemDesc() {
+        return sachRepository.findByOrderByLuocxemDesc();
     }
 }
