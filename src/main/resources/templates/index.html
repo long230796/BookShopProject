@@ -79,7 +79,7 @@
 			</div>
 		</div>
 
-		<div class="best-seller mw-100 " style="background-color: #ffffff">
+		<div  class="best-seller mw-100 " style="background-color: #ffffff">
 			<div>
 				<h2 class="section-heading"  style="border-bottom: 1px solid #e1dcdc; text-align: start">
 					<b>Bán chạy</b>
@@ -88,7 +88,7 @@
 			</div>
 			
 			<div  class="card-container d-flex justify-content-around flex-wrap">
-				<div th:each="book, iterStat : ${bestSellers}" class="card m-2" style="width: 200px">
+				<div th:each="book, iterStat : ${bestSellers}" th:unless="${iterStat.count > 10 || book.soluongdaban <= 0}"  class="card m-2" style="width: 200px">
 					<!-- Card image -->
 					<div class="view overlay zoom">
 						<a href="#" th:href="@{/book/{masach}/detail(masach=${book.masach})}" class="text-primary mr-sm-2">

@@ -13,15 +13,26 @@
         <div th:replace="layoutMDB ::menu"></div>
 
         <!-- mua sach -->
-        <div th:object="${book}" class="buy d-flex flex-row pt-4 pl-2 m-0" style="margin: 6px; background-color: #ffffff">
+        <div th:object="${book}"  class="buy d-flex flex-row pt-4 pl-2 m-0" style="margin: 6px; background-color: #ffffff">
             <div class="buy-element1 pr-3" style="width: 40%">
                 <div class="book-image d-flex justify-content-center">
                     <img th:src="@{/image/{image}(image=${book.hinhanh})}" class="img-fluid mw-100" alt="Responsive image">
 
                 </div>
-                <div class="buyBtn mw-100 d-flex justify-content-center">
-                    <button type="button" class="btn btn-danger">Mua ngay</button>
+                <div class="d-flex justify-content-center">
+                	<form th:object="${carts}" id="buyNowForm" action="#" th:action="@{/book/{masach}/buyNow(masach=${book.masach})}" method="get">
+		                <div class="buyBtn mw-100 d-flex justify-content-center">
+		                    <button onclick="getAmount()" type="button" class="btn btn-danger">Mua ngay</button>
+		                    <input id="soluong" type="hidden" th:field="*{soluong}" /> 
+		                </div>
+	                </form>
+	                <!-- <form action="#" th:action="@{/book/{masach}/cart(masach=${book.masach})}" method="get">
+		                <div class="buyBtn mw-100 d-flex justify-content-center">
+		                    <button type="submit" class="btn btn-danger">thêm vào giỏ</button>
+		                </div>
+	                </form> -->
                 </div>
+                
             </div>
 
             <div class="buy-element2">
@@ -53,7 +64,7 @@
                 <!-- Amount -->
                 <div class="amount d-flex flex-row align-items-center">
                     <h6 class="mr-5">Số lượng: </h6>
-                    <form class="amount-form m-0 p-0 d-flex">
+                    <form  class="amount-form m-0 p-0 d-flex">
                         <div class="value-button" id="decrease" onclick="decreaseValue()" value="Decrease Value">-</div>
                         <input type="number" id="number" value="0" />
                         <div class="value-button" id="increase" onclick="increaseValue()" value="Increase Value">+</div>
@@ -191,7 +202,13 @@
     </div>
 
     <script type="text/javascript" src="/MDB-free/js/amountBtn.js"></script>
-	
+	<script type="text/javascript">
+		function getAmount() {
+			var number = document.getElementById('number').value
+			document.getElementById('soluong').value = number
+			document.getElementById('buyNowForm').submit()
+		}
+	</script>
 </body>
 
 </html>

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -22,6 +23,8 @@ import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.Random;
 
+import group10.bookShop.entities.Cart;
+import group10.bookShop.entities.Hoadon;
 import group10.bookShop.entities.Kinhte;
 import group10.bookShop.entities.Kynangsong;
 import group10.bookShop.entities.Nuoidaycon;
@@ -31,6 +34,8 @@ import group10.bookShop.entities.Sachngoaingu;
 import group10.bookShop.entities.Thieunhi;
 import group10.bookShop.entities.Vanhocnuocngoai;
 import group10.bookShop.entities.Vanhoctrongnuoc;
+import group10.bookShop.service.cart.CartService;
+import group10.bookShop.service.hoadon.HoadonService;
 import group10.bookShop.service.kinhte.KinhteService;
 import group10.bookShop.service.kynangsong.KynangsongService;
 import group10.bookShop.service.nuoidaycon.NuoidayconService;
@@ -73,11 +78,19 @@ public class SachController {
 	@Autowired(required = true)
 	private VanhoctrongnuocService vanhoctrongnuocService;
 	
+	@Autowired(required = true)
+	private HoadonService hoadonService;
+	
+	@Autowired(required = true)
+	private CartService cartService;
+	
 	@GetMapping("/book")
 	public String list(Model model) {
 		try {
 			model.addAttribute("books", bookService.findMasachDesc()); // controller gọi service yêu cầu dữ liệu.
 			model.addAttribute("views", bookService.findLuocxemDesc()); // controller gọi service yêu cầu dữ liệu.
+			model.addAttribute("bestSellers", bookService.findSoluongdabanDesc()); // controller gọi service yêu cầu dữ liệu.
+
 			model.addAttribute("foreignLanguages", sachngoainguService.findAll()); // controller gọi service yêu cầu dữ liệu.
 			model.addAttribute("domestics", vanhoctrongnuocService.findAll()); // controller gọi service yêu cầu dữ liệu.
 			model.addAttribute("foreigns", vanhocnuocngoaiService.findAll());
@@ -85,6 +98,7 @@ public class SachController {
 			model.addAttribute("lifeSkills", kynangsongService.findAll());
 			model.addAttribute("economics", kinhteService.findAll());
 			model.addAttribute("cares", nuoidayconService.findAll());
+			
 		}catch(NullPointerException e) {
 			model.addAttribute("errorMessage", e);
 		}
@@ -191,7 +205,7 @@ public class SachController {
 	public String detail(@PathVariable("masach") Integer masach, Model model) {
 		    Sach book = bookService.findById(masach);
 		    String currentCategory = book.getTheloai();
-		   
+		    
 		    int currentViews = book.getLuocxem();
 		    book.setLuocxem(currentViews += 1);
 		    bookService.save(book);
@@ -207,13 +221,15 @@ public class SachController {
 			 	model.addAttribute("book", bookService.findById(masach));
 			 	model.addAttribute("relateBooks", kinhteService.findAll());
 			 	model.addAttribute("views", bookService.findLuocxemDesc());
-			 	
+				model.addAttribute("carts", new Cart());
+
 			    break;
 			    
 		    case "nuoidaycon" :
 			 	model.addAttribute("book", bookService.findById(masach));
 			 	model.addAttribute("relateBooks", nuoidayconService.findAll());
 			 	model.addAttribute("views", bookService.findLuocxemDesc());
+				model.addAttribute("carts", new Cart());
 
 			    break;
 			    
@@ -221,6 +237,7 @@ public class SachController {
 			 	model.addAttribute("book", bookService.findById(masach));
 			 	model.addAttribute("relateBooks", kynangsongService.findAll());
 			 	model.addAttribute("views", bookService.findLuocxemDesc());
+				model.addAttribute("carts", new Cart());
 
 			    break;
 			    
@@ -228,13 +245,15 @@ public class SachController {
 			 	model.addAttribute("book", bookService.findById(masach));
 			 	model.addAttribute("relateBooks", sachgiaokhoaService.findAll());
 			 	model.addAttribute("views", bookService.findLuocxemDesc());
+				model.addAttribute("carts", new Cart());
 
-			    break;
+			    break;	
 			    
 		    case "sachngoaingu" :
 			 	model.addAttribute("book", bookService.findById(masach));
 			 	model.addAttribute("relateBooks", sachngoainguService.findAll());
 			 	model.addAttribute("views", bookService.findLuocxemDesc());
+				model.addAttribute("carts", new Cart());
 
 			    break;
 			    
@@ -242,6 +261,7 @@ public class SachController {
 			 	model.addAttribute("book", bookService.findById(masach));
 			 	model.addAttribute("relateBooks", thieunhiService.findAll());
 			 	model.addAttribute("views", bookService.findLuocxemDesc());
+				model.addAttribute("carts", new Cart());
 
 			    break;
 			    
@@ -249,6 +269,7 @@ public class SachController {
 			 	model.addAttribute("book", bookService.findById(masach));
 			 	model.addAttribute("relateBooks", vanhocnuocngoaiService.findAll());
 			 	model.addAttribute("views", bookService.findLuocxemDesc());
+				model.addAttribute("carts", new Cart());
 
 			    break;
 			
@@ -256,17 +277,63 @@ public class SachController {
 			 	model.addAttribute("book", bookService.findById(masach));
 			 	model.addAttribute("relateBooks", vanhoctrongnuocService.findAll());
 			 	model.addAttribute("views", bookService.findLuocxemDesc());
+				model.addAttribute("carts", new Cart());
 
-			    break;
+			    break;	
 		    }
 
 		    return "bookDetail";
 	}
 	
-	@GetMapping("/book/buyBook")
-	public String buy(Model model) {
-	    model.addAttribute("book", new Sach());  // khởi tạo mới 1 đối tượng và gửi lên form Mỗi thuộc tính của contact tương ứng với một input trong form.
+	@GetMapping("/book/{masach}/buyNow")
+	public String buy(@PathVariable("masach") Integer masach, @ModelAttribute("carts") Cart carts, Model model) {
+		
+		Hoadon hoadon = new Hoadon();
+		hoadon.setSoluong(carts.getSoluong());
+		hoadon.setMadonhang(carts.getMadonhang());
+		
+		model.addAttribute("carts", carts);
+	    model.addAttribute("book", bookService.findById(masach));  // khởi tạo mới 1 đối tượng và gửi lên form Mỗi thuộc tính của contact tương ứng với một input trong form.
+	    model.addAttribute("bills", hoadon);
+	    System.out.println(hoadon.getSoluong());
 	    return "buyBook";
+	}
+	
+	@PostMapping("/book/{masach}/printBill")
+	public String save( Model model,@Valid @ModelAttribute("bills") Hoadon bills, BindingResult result, RedirectAttributes redirect,
+			@PathVariable("masach") Integer masach) {  // @Valid Contact contact để kích hoạt cơ chế validation cho contact(trong entities ), lấy result làm biding
+		
+    	Sach ms = bookService.findById(masach);
+	    if (result.hasErrors()) {
+	    	model.addAttribute("book", ms);
+	    	if (bills.getSoluong() > ms.getTonkho() ) {
+			    model.addAttribute("outOfStockMessage", "Không đủ số lượng sản phẩm (còn lại " + ms.getTonkho() + " )");
+		    }
+	    	System.out.println("loi");
+	    	return "buyBook";
+	    	
+	    }
+	    
+	   
+	 // nhap thong tin tu sach qua hoadon
+	    bills.setHinhanh(ms.getHinhanh());
+	    bills.setTheloai(ms.getTheloai());
+	    bills.setGiaca(ms.getGiaca());
+	    bills.setTensach(ms.getTensach());
+	    bills.setMasach(ms.getMasach());
+	    ms.setSoluongdaban(bills.getSoluong());
+	    ms.setTonkho(ms.getTonkho() - bills.getSoluong());
+	    bills.setNgayxuatban(LocalDateTime.now());
+
+	    hoadonService.save(bills);
+	    bookService.save(ms);
+    	model.addAttribute("book", ms );
+    	model.addAttribute("bills", bills);
+    	int soluong = bills.getSoluong();
+    	double gia = bills.getGiaca();
+    	double tong = gia * soluong;
+    	model.addAttribute("tongcong", tong);
+	    return "bill";
 	}
 	
 	

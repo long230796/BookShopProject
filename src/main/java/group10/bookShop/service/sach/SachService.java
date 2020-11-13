@@ -14,6 +14,7 @@ public interface SachService
 	
 	List<Sach> findMasachDesc();
 	List<Sach> findLuocxemDesc();
+	List<Sach> findSoluongdabanDesc();
 
 	
 	Sach findById(Integer masach);

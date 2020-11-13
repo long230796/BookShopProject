@@ -18,6 +18,6 @@ public interface SachRepository extends CrudRepository<Sach, Integer>{
 	List<Sach> findByTensachContaining(String term);  // tìm kiếm theo line và theo đúng tên mà mình mong muốn
     List<Sach> findByOrderByMasachDesc();
     List<Sach> findByOrderByLuocxemDesc();
-
+    List<Sach> findByOrderBySoluongdabanDesc();
 
 }

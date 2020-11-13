@@ -51,4 +51,9 @@ public class SachServiceImpl implements SachService {
     public List<Sach> findLuocxemDesc() {
         return sachRepository.findByOrderByLuocxemDesc();
     }
+	
+	@Override
+    public List<Sach> findSoluongdabanDesc() {
+        return sachRepository.findByOrderBySoluongdabanDesc();
+    }
 }
