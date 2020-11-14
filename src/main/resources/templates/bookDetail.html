@@ -42,11 +42,11 @@
                 	</div>
                     
                    	<div class=" align-items-center">
-                  		<a href="#" th:href="@{/book/{masach}/edit(masach=${book.masach})}" class="text-primary mr-sm-2"> <!-- (masach=${book.masach}) truyền giá trị cho {id} -->
+                  		<a th:if="${#request.userPrincipal != null}" href="#" th:href="@{/book/{masach}/edit(masach=${book.masach})}" class="text-primary mr-sm-2"> <!-- (masach=${book.masach}) truyền giá trị cho {id} -->
 							<i class="fas fa-pencil-alt"></i>
 						</a>
 
-						<a href="#" th:href="@{/book/{masach}/{theloai}/delete(masach=${book.masach}, theloai=${book.theloai})}" class="text-danger">
+						<a th:if="${#request.userPrincipal != null}" href="#" th:href="@{/book/{masach}/{theloai}/delete(masach=${book.masach}, theloai=${book.theloai})}" class="text-danger">
 							<i class="fas fa-trash"></i>
 						</a>
 					</div>
