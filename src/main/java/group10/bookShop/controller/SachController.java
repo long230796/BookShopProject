@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -32,6 +34,7 @@ import group10.bookShop.entities.Sach;
 import group10.bookShop.entities.Sachgiaokhoa;
 import group10.bookShop.entities.Sachngoaingu;
 import group10.bookShop.entities.Thieunhi;
+import group10.bookShop.entities.User;
 import group10.bookShop.entities.Vanhocnuocngoai;
 import group10.bookShop.entities.Vanhoctrongnuoc;
 import group10.bookShop.service.cart.CartService;
@@ -43,6 +46,7 @@ import group10.bookShop.service.sach.SachService;
 import group10.bookShop.service.sachgiaokhoa.SachgiaokhoaService;
 import group10.bookShop.service.sachngoaingu.SachngoainguService;
 import group10.bookShop.service.thieunhi.ThieunhiService;
+import group10.bookShop.service.user.UserService;
 import group10.bookShop.service.vanhocnuocngoai.VanhocnuocngoaiService;
 import group10.bookShop.service.vanhoctrongnuoc.VanhoctrongnuocService;
 
@@ -83,6 +87,9 @@ public class SachController {
 	
 	@Autowired(required = true)
 	private CartService cartService;
+	
+	@Autowired(required = true)
+	private UserService userService;
 	
 	@GetMapping("/book")
 	public String list(Model model) {
@@ -339,15 +346,61 @@ public class SachController {
 	
 	@GetMapping("/book/login")
 	public String login(Model model) {
-	    model.addAttribute("book", new Sach());  // khởi tạo mới 1 đối tượng và gửi lên form Mỗi thuộc tính của contact tương ứng với một input trong form.
+//	    model.addAttribute("user", new User());  // khởi tạo mới 1 đối tượng và gửi lên form Mỗi thuộc tính của contact tương ứng với một input trong form.
 	    return "login";
 	}
 	
 	@GetMapping("/book/register")
 	public String register(Model model) {
-	    model.addAttribute("book", new Sach());  // khởi tạo mới 1 đối tượng và gửi lên form Mỗi thuộc tính của contact tương ứng với một input trong form.
+	    model.addAttribute("user", new User());  // khởi tạo mới 1 đối tượng và gửi lên form Mỗi thuộc tính của contact tương ứng với một input trong form.
 	    return "register";
 	}
+	
+	@PostMapping("/user/save")
+	public String userSave(Model model, @Valid @ModelAttribute("user") User user, BindingResult result, RedirectAttributes redirect) {  // @Valid Contact contact để kích hoạt cơ chế validation cho contact(trong entities ), lấy result làm biding
+		
+	    if (result.hasErrors()){  
+	    	if (!userService.search(user.getEmail()).isEmpty()) {
+	    		model.addAttribute("emailMessage", "Email đã tồn tại");
+	    		return "register";
+		        
+	    	}
+	    	return "register";
+	        
+	    }
+	    
+	    
+	    
+	    userService.save(user);
+	    return "redirect:/book/login";
+	}
+	
+	@PostMapping("/user/login")
+	public String userLogin(Model model, @Valid @ModelAttribute("user") User user, BindingResult result, RedirectAttributes redirect) {  // @Valid Contact contact để kích hoạt cơ chế validation cho contact(trong entities ), lấy result làm biding
+		
+//	    if (result.hasErrors()) {  	    	
+//	    	return "login";        
+//	    }
+	    
+		System.out.println(userService.search(user.getEmail()).isEmpty());
+	    if(userService.search(user.getEmail()).isEmpty()) {
+	    	model.addAttribute("wrongEmail", "Nhập sai email");
+	    	return "login";
+	    }  
+	    if(!userService.search(user.getEmail()).isEmpty()) {
+	    	model.addAttribute("wrongPassword", "Nhập sai mật khẩu");
+	    	return "login";
+	    }
+	    
+//	    if (user.getEmail() == "toicanh25@gmail.com" || user.getMatkhau() == "canhtraudien" && user.getEmail() == "long230796@gmail.com" && user.getEmail() == "hoang@gmail.com")
+	    return "redirect:/book";
+	}
+	
+	@RequestMapping(value = "/logoutSuccessful", method = RequestMethod.GET)
+    public String logoutSuccessfulPage(Model model) {
+        model.addAttribute("message", "Đăng xuất thành công!!");
+        return "logoutSuccessfulPage";
+    }
 //	@GetMapping("/")
 //    public String homepage() {
 //        return "index";
