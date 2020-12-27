@@ -298,10 +298,14 @@ public class SachController {
 		Hoadon hoadon = new Hoadon();
 		hoadon.setSoluong(carts.getSoluong());
 		hoadon.setMadonhang(carts.getMadonhang());
+		Sach sach =  bookService.findById(masach); // tìm ra mã sách tương ứng.
+		int tongcong = (int) (hoadon.getSoluong() * sach.getGiaca());
 		
+		model.addAttribute("tongcong", tongcong);
 		model.addAttribute("carts", carts);
-	    model.addAttribute("book", bookService.findById(masach));  // khởi tạo mới 1 đối tượng và gửi lên form Mỗi thuộc tính của contact tương ứng với một input trong form.
+	    model.addAttribute("book", sach);  // khởi tạo mới 1 đối tượng và gửi lên form Mỗi thuộc tính của contact tương ứng với một input trong form.
 	    model.addAttribute("bills", hoadon);
+	    
 	    System.out.println(hoadon.getSoluong());
 	    return "buyBook";
 	}
@@ -338,7 +342,7 @@ public class SachController {
     	model.addAttribute("bills", bills);
     	int soluong = bills.getSoluong();
     	double gia = bills.getGiaca();
-    	double tong = gia * soluong;
+    	double tong = gia * soluong + 15000;
     	model.addAttribute("tongcong", tong);
 	    return "bill";
 	}
@@ -523,17 +527,22 @@ public class SachController {
 	
 	@GetMapping("/book/{masach}/edit")
 	public String edit(@PathVariable("masach") Integer masach, Model model) {
-	    model.addAttribute("book", bookService.findById(masach));
-	    Sach book = bookService.findById(masach);
-	    int currentViews = book.getLuocxem();
-	    book.setLuocxem(currentViews += 1);
-	    bookService.save(book);
-	    return "addBook";
+		try {
+			model.addAttribute("book", bookService.findById(masach));
+		    Sach book = bookService.findById(masach);
+		    int currentViews = book.getLuocxem();
+		    book.setLuocxem(currentViews += 1);
+		    bookService.save(book);
+		} catch (Exception e) {
+			model.addAttribute("errMessage", e);
+		}
+		
+		return "addBook";
+	    
 	}
 	
 	@GetMapping("/book/{masach}/{theloai}/delete")
 	public String delete(@PathVariable int  masach, @PathVariable String theloai, RedirectAttributes redirect) {
-		
 		 switch(theloai) {
 		    case "kinhte" :
 		    	bookService.delete(masach);

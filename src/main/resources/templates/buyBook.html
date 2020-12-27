@@ -127,11 +127,11 @@
 			              			<th>Số lượng:</th>
 	
 			              			<td>
-			              				<div class="m-0 ml-5 p-0 d-flex mr-5">
-											<div class="value-button" id="decrease" onclick="decreaseValue()" value="Decrease Value">-</div>
-											<input th:field="*{soluong}" type="number" id="number" value="0"  />  <!-- th:value="${book.soluong}" -->
-											<div class="value-button" id="increase" onclick="increaseValue()" value="Increase Value">+</div>
-										</div>										
+			              				<b th:text="*{soluong}" class="m-0 ml-5 p-0 d-flex mr-5">
+											<!-- <div class="value-button" id="decrease" onclick="decreaseValue()" value="Decrease Value">-</div>
+											<input th:field="*{soluong}" type="number" id="number" value="0"  />  th:value="${book.soluong}"
+											<div class="value-button" id="increase" onclick="increaseValue()" value="Increase Value">+</div> -->
+										</b>										
 			              			</td>
 			              			<td>
 			              				<!-- thongbao -->
@@ -148,13 +148,14 @@
 										     </div>
 										 </div>
 			              			</td>
+			              			
 			              		</tr>
 	
 			              		<tr>
 			              			<th style="text-align: start">Giá: </th>
 	
 			              			<td>
-			              				<h3 th:text="${book.giaca}" class="text-warning ml-5" style="font-weight: 600; margin-top: 8px" ></h3>
+			              				<h3 th:text="${tongcong}" class="text-warning ml-5" style="font-weight: 600; margin-top: 8px" ></h3>
 			              			</td>
 			              		</tr>
 			              	</tbody>
@@ -174,6 +175,19 @@
 
     </div>
    <script type="text/javascript" src="/MDB-free/js/amountBtn.js"></script>
+   <script type="text/javascript">
+		function getAmount() {
+			var number = parseInt(document.getElementById('number').value)
+			if (number > 0) {
+				document.getElementById('soluong').value = number
+				document.getElementById('buyNowForm').submit()
+			} else {
+				document.getElementsByClassName("numberErr")[0].style.display="block"
+			}
+			
+		}
+		
+	</script>
    <script type="text/javascript">
 		$('.toast').toast('show');
    </script>
